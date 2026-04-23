@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hype Man Live</title>
+    <style>
+        :root {
+            --bg: #08111f;
+            --bg-alt: #0f1c31;
+            --panel: rgba(12, 24, 43, 0.82);
+            --panel-strong: rgba(11, 20, 36, 0.96);
+            --line: rgba(150, 196, 255, 0.16);
+            --text: #f4f7fb;
+            --muted: #8ea2c2;
+            --cyan: #62d7ff;
+            --teal: #53f1cf;
+            --amber: #ffbf69;
+            --rose: #ff6b8a;
+            --danger: #ff6a6a;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "Aptos", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(83, 241, 207, 0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(98, 215, 255, 0.18), transparent 34%),
+                linear-gradient(160deg, #07101c 0%, #0b1627 54%, #08111f 100%);
+        }
+
+        .app-shell {
+            max-width: 1380px;
+            margin: 0 auto;
+            padding: 28px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .hero-card, .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(14px);
+        }
+
+        .hero-card {
+            padding: 26px 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            inset: auto -10% -45% auto;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(98, 215, 255, 0.22), transparent 65%);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--teal);
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--teal);
+            box-shadow: 0 0 0 0 rgba(83, 241, 207, 0.5);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(83, 241, 207, 0.55); }
+            70% { box-shadow: 0 0 0 18px rgba(83, 241, 207, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(83, 241, 207, 0); }
+        }
+
+        h1 {
+            margin: 14px 0 10px;
+            font-size: clamp(34px, 4vw, 54px);
+            line-height: 0.96;
+            letter-spacing: -0.04em;
+        }
+
+        .hero-copy {
+            margin: 0;
+            max-width: 760px;
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .hero-note {
+            margin-top: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 191, 105, 0.1);
+            border: 1px solid rgba(255, 191, 105, 0.16);
+            color: #ffd6a1;
+            font-size: 12px;
+        }
+
+        .status-cluster {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .status-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .status-title {
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        #status-bar {
+            margin-top: 10px;
+            padding: 16px 18px;
+            background: rgba(9, 17, 30, 0.86);
+            border: 1px solid rgba(98, 215, 255, 0.22);
+            border-left: 4px solid var(--cyan);
+            border-radius: 18px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--cyan);
+            transition: color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+        }
+
+        #status-caption {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .status-chip {
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: rgba(7, 15, 28, 0.72);
+            border: 1px solid var(--line);
+        }
+
+        .status-chip-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--muted);
+        }
+
+        .status-chip-value {
+            margin-top: 8px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr auto;
+            gap: 14px;
+            align-items: end;
+            margin-bottom: 18px;
+            padding: 18px;
+        }
+
+        .selector-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .selector-field label {
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        select, button {
+            border-radius: 16px;
+            border: 1px solid rgba(150, 196, 255, 0.18);
+            font: inherit;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(8, 18, 33, 0.88);
+            color: var(--text);
+            outline: none;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .controls.compact button {
+            padding: 10px 14px;
+        }
+
+        button {
+            padding: 14px 18px;
+            color: var(--text);
+            cursor: pointer;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff8f5c, #ff4f8b);
+            box-shadow: 0 14px 28px rgba(255, 79, 139, 0.18);
+        }
+
+        button.secondary {
+            background: linear-gradient(135deg, rgba(14, 28, 48, 0.96), rgba(19, 37, 62, 0.96));
+            box-shadow: none;
+            color: #d7e1ef;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 18px;
+        }
+
+        .media-panel {
+            padding: 18px;
+        }
+
+        .video-frame {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            border: 1px solid rgba(150, 196, 255, 0.18);
+            background: linear-gradient(180deg, rgba(6, 12, 22, 0.4), rgba(6, 12, 22, 0.85));
+            min-height: 420px;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            min-height: 420px;
+            object-fit: cover;
+            background: #02050a;
+            display: block;
+        }
+
+        .video-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 18px;
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(4, 8, 14, 0.42), rgba(4, 8, 14, 0.12) 35%, rgba(4, 8, 14, 0.7));
+        }
+
+        .overlay-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(7, 16, 28, 0.82);
+            border: 1px solid rgba(150, 196, 255, 0.16);
+            font-size: 12px;
+            color: #dfeaff;
+        }
+
+        .meter-stack {
+            display: grid;
+            gap: 12px;
+        }
+
+        .meter-card {
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: rgba(7, 15, 28, 0.84);
+            border: 1px solid rgba(150, 196, 255, 0.16);
+        }
+
+        .meter-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .meter-track {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .meter-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.16s ease, background 0.16s ease;
+        }
+
+        #diff-bar { background: linear-gradient(90deg, var(--cyan), var(--amber)); }
+        #audio-bar { background: linear-gradient(90deg, var(--teal), #7bf0a6); }
+        #intensity-bar { background: linear-gradient(90deg, var(--amber), var(--rose)); }
+
+        .telemetry-panel {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .diagnostics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+        .diag-card {
+            padding: 16px;
+            border-radius: 20px;
+            background: rgba(8, 16, 30, 0.82);
+            border: 1px solid rgba(150, 196, 255, 0.14);
+        }
+        .diag-card.full {
+            grid-column: 1 / -1;
+        }
+        .diag-table-wrap {
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 18px;
+            border: 1px solid rgba(150, 196, 255, 0.14);
+            background: rgba(8, 16, 30, 0.82);
+        }
+        .diag-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .diag-table th,
+        .diag-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(150, 196, 255, 0.08);
+        }
+        .diag-table th {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--muted);
+            background: rgba(12, 24, 43, 0.92);
+        }
+        .diag-pass {
+            color: var(--teal);
+            font-weight: 700;
+        }
+        .diag-fail {
+            color: var(--danger);
+            font-weight: 700;
+        }
+        .diag-value {
+            margin-top: 8px;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+        .diag-sub {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .stat-card {
+            padding: 16px;
+            border-radius: 20px;
+            background: rgba(8, 16, 30, 0.82);
+            border: 1px solid rgba(150, 196, 255, 0.14);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .stat-value {
+            margin-top: 8px;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .stat-sub {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .log-sheet {
+            margin-top: 18px;
+            padding: 18px;
+        }
+
+        .section-title {
+            margin: 0 0 14px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+        }
+
+        #log-table-wrapper {
+            overflow: hidden;
+            border-radius: 20px;
+            border: 1px solid rgba(150, 196, 255, 0.14);
+            background: rgba(8, 16, 30, 0.82);
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        #log-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #log-table thead tr {
+            background: rgba(12, 24, 43, 0.92);
+        }
+
+        #log-table th {
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        #log-table tbody tr:hover {
+            background: rgba(98, 215, 255, 0.04);
+        }
+
+        .hint {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .readout-card {
+            padding: 18px;
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at top right, rgba(98, 215, 255, 0.12), transparent 38%),
+                linear-gradient(180deg, rgba(7, 15, 28, 0.96), rgba(10, 21, 38, 0.94));
+            border: 1px solid rgba(150, 196, 255, 0.16);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .readout-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+        }
+
+        .readout-headline {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+        }
+
+        .readout-detail {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .readout-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .readout-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(150, 196, 255, 0.12);
+            color: #dbe5f3;
+            font-size: 12px;
+        }
+
+        .companion-stack {
+            display: grid;
+            gap: 14px;
+        }
+
+        .companion-card {
+            padding: 18px;
+            border-radius: 22px;
+            background: rgba(8, 16, 30, 0.82);
+            border: 1px solid rgba(150, 196, 255, 0.14);
+        }
+
+        .companion-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+        }
+
+        .companion-headline {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .companion-copy {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .feedback-actions {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .feedback-button {
+            padding: 11px 10px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(150, 196, 255, 0.12);
+            color: #dbe5f3;
+            box-shadow: none;
+        }
+
+        .feedback-button.active {
+            background: rgba(98, 215, 255, 0.14);
+            border-color: rgba(98, 215, 255, 0.28);
+        }
+
+        .memory-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .memory-item {
+            padding: 12px 14px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(150, 196, 255, 0.1);
+        }
+
+        .memory-item-title {
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .memory-item-sub {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .memory-empty {
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 18px;
+            border: 1px dashed rgba(150, 196, 255, 0.14);
+            color: var(--muted);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .operations-panel {
+            margin-top: 18px;
+            padding: 22px;
+        }
+
+        .operations-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .operations-copy {
+            margin: 8px 0 0;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .tab-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-button {
+            padding: 11px 16px;
+            border-radius: 999px;
+            background: rgba(8, 16, 30, 0.82);
+            border: 1px solid rgba(150, 196, 255, 0.16);
+            color: var(--muted);
+            box-shadow: none;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, rgba(98, 215, 255, 0.22), rgba(255, 191, 105, 0.18));
+            border-color: rgba(98, 215, 255, 0.3);
+            color: var(--text);
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .runtime-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .runtime-summary-card {
+            padding: 16px;
+            border-radius: 20px;
+            background: rgba(8, 16, 30, 0.82);
+            border: 1px solid rgba(150, 196, 255, 0.14);
+        }
+
+        .runtime-summary-label {
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .runtime-summary-value {
+            margin-top: 10px;
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+        }
+
+        .runtime-summary-sub {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .runtime-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .runtime-filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-pill {
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(8, 16, 30, 0.82);
+            border: 1px solid rgba(150, 196, 255, 0.14);
+            color: var(--muted);
+            box-shadow: none;
+        }
+
+        .filter-pill.active {
+            background: rgba(83, 241, 207, 0.14);
+            border-color: rgba(83, 241, 207, 0.26);
+            color: var(--text);
+        }
+
+        .runtime-caption {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .runtime-feed {
+            display: grid;
+            gap: 12px;
+            max-height: 560px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .runtime-empty {
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px dashed rgba(150, 196, 255, 0.18);
+            background: rgba(8, 16, 30, 0.62);
+            color: var(--muted);
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .runtime-event {
+            --event-accent: var(--cyan);
+            position: relative;
+            overflow: hidden;
+            padding: 16px 18px 16px 22px;
+            border-radius: 22px;
+            background: rgba(8, 16, 30, 0.88);
+            border: 1px solid rgba(150, 196, 255, 0.14);
+        }
+
+        .runtime-event::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 4px;
+            background: var(--event-accent);
+        }
+
+        .runtime-event.info {
+            --event-accent: var(--cyan);
+        }
+
+        .runtime-event.success {
+            --event-accent: var(--teal);
+        }
+
+        .runtime-event.warn {
+            --event-accent: var(--amber);
+        }
+
+        .runtime-event.error {
+            --event-accent: var(--danger);
+        }
+
+        .runtime-event-meta {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .runtime-event-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .runtime-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(150, 196, 255, 0.12);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #dce8f6;
+        }
+
+        .runtime-chip.level-info {
+            color: var(--cyan);
+        }
+
+        .runtime-chip.level-success {
+            color: var(--teal);
+        }
+
+        .runtime-chip.level-warn {
+            color: var(--amber);
+        }
+
+        .runtime-chip.level-error {
+            color: var(--danger);
+        }
+
+        .runtime-time {
+            color: var(--muted);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .runtime-event-title {
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1.18;
+            letter-spacing: -0.02em;
+        }
+
+        .runtime-event-detail {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .runtime-metrics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .runtime-metric {
+            padding: 7px 10px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(150, 196, 255, 0.12);
+            font-size: 12px;
+            color: #dfe9f6;
+        }
+
+        .tab-section {
+            padding-top: 4px;
+        }
+
+        @media (max-width: 1080px) {
+            .hero, .main-grid, .toolbar {
+                grid-template-columns: 1fr;
+            }
+            .runtime-summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .app-shell { padding: 16px; }
+            .hero-card, .status-cluster, .toolbar, .media-panel, .telemetry-panel, .log-sheet, .operations-panel {
+                border-radius: 20px;
+                padding: 16px;
+            }
+            .stats-grid, .status-grid {
+                grid-template-columns: 1fr;
+            }
+            .runtime-summary-grid {
+                grid-template-columns: 1fr;
+            }
+            video, .video-frame {
+                min-height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <section class="hero">
+            <div class="hero-card">
+                <div class="eyebrow"><span class="pulse-dot"></span> Live Moment Intelligence</div>
+                <h1>Hype Man</h1>
+                <p class="hero-copy">
+                    A real-time companion that watches the emotional contour of your screen, listens for crowd energy,
+                    classifies whether a moment is genuinely worth reacting to, and responds with a tailored persona.
+                </p>
+                <div class="hero-note">Share system audio during screen capture for the strongest live-event detection.</div>
+            </div>
+            <div class="hero-card status-cluster">
+                <div>
+                    <div class="status-title">Pipeline State</div>
+                    <div id="status-bar">Initializing runtime...</div>
+                    <div id="status-caption">Preparing capture, classifiers, and voice playback.</div>
+                </div>
+                <div class="status-grid">
+                    <div class="status-chip">
+                        <div class="status-chip-label">Active Persona</div>
+                        <div id="persona-badge" class="status-chip-value">Play-by-Play</div>
+                    </div>
+                    <div class="status-chip">
+                        <div class="status-chip-label">Queue Depth</div>
+                        <div id="queue-depth" class="status-chip-value">0</div>
+                    </div>
+                    <div class="status-chip">
+                        <div class="status-chip-label">Pipeline Phase</div>
+                        <div id="pipeline-phase" class="status-chip-value">Booting</div>
+                    </div>
+                    <div class="status-chip">
+                        <div class="status-chip-label">Signal Blend</div>
+                        <div id="signal-blend" class="status-chip-value">0%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel toolbar">
+            <div class="selector-field">
+                <label for="video-source">Screen Source</label>
+                <select id="video-source"><option>Loading screens...</option></select>
+            </div>
+            <div class="selector-field">
+                <label for="persona-select">Hype Persona</label>
+                <select id="persona-select">
+                    <option value="play-by-play">Play-by-Play</option>
+                    <option value="best-friend">Best Friend</option>
+                    <option value="founder-mode">Founder Mode</option>
+                    <option value="locker-room">Locker Room</option>
+                    <option value="roast-lite">Roast Lite</option>
+                    <option value="auto">Auto Rotate</option>
+                </select>
+            </div>
+            <div class="controls">
+                <button id="manual-hype-btn">Trigger Hype Now</button>
+                <button id="export-session-btn" class="secondary">Export Session</button>
+            </div>
+        </section>
+
+        <section class="main-grid">
+            <div class="panel media-panel">
+                <div class="video-frame">
+                    <video id="video-feed" autoplay muted></video>
+                    <div class="video-overlay">
+                        <div class="overlay-badges">
+                            <div class="badge" id="source-badge">No source selected</div>
+                            <div class="badge" id="confidence-badge">Confidence building</div>
+                        </div>
+                        <div class="meter-stack">
+                            <div class="meter-card">
+                                <div class="meter-header"><span>Visual Motion</span><span id="diff-label">0%</span></div>
+                                <div class="meter-track"><div id="diff-bar" class="meter-bar"></div></div>
+                            </div>
+                            <div class="meter-card">
+                                <div class="meter-header"><span>Audio Presence</span><span id="audio-label">0%</span></div>
+                                <div class="meter-track"><div id="audio-bar" class="meter-bar"></div></div>
+                            </div>
+                            <div class="meter-card">
+                                <div class="meter-header"><span>Moment Intensity</span><span id="intensity-label">0%</span></div>
+                                <div class="meter-track"><div id="intensity-bar" class="meter-bar"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hint">Press <strong>Space</strong> to force a showcase reaction during demos.</div>
+            </div>
+
+            <aside class="panel telemetry-panel">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Events Seen</div>
+                        <div id="stat-events" class="stat-value">0</div>
+                        <div class="stat-sub">Moments entering the classifier.</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Hype Calls</div>
+                        <div id="stat-hype-calls" class="stat-value">0</div>
+                        <div class="stat-sub">Moments promoted to reaction.</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Hit Rate</div>
+                        <div id="stat-hit-rate" class="stat-value">0%</div>
+                        <div class="stat-sub">How selective the classifier is.</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Median Latency</div>
+                        <div id="stat-latency" class="stat-value">0ms</div>
+                        <div class="stat-sub">Observed end-to-end response time.</div>
+                    </div>
+                </div>
+
+                <div class="companion-stack">
+                    <div class="readout-card">
+                        <div class="readout-title">Live Readout</div>
+                        <div id="readout-headline" class="readout-headline">Runtime waking up</div>
+                        <div id="readout-detail" class="readout-detail">
+                            The latest capture, queue, reaction, and failure notes will surface here while the full timeline lives in the Runtime Hype tab.
+                        </div>
+                        <div class="readout-meta">
+                            <div class="readout-pill">Last update <span id="readout-time">Just now</span></div>
+                            <div class="readout-pill">Filter <span id="runtime-filter-label">All activity</span></div>
+                        </div>
+                    </div>
+
+                    <div class="companion-card">
+                        <div class="companion-title">Reaction Tuning</div>
+                        <div id="feedback-headline" class="companion-headline">No reaction to rate yet</div>
+                        <div id="feedback-copy" class="companion-copy">When a line lands or misses, score it here so the companion learns how much presence and restraint feels right.</div>
+                        <div class="feedback-actions">
+                            <button class="feedback-button" data-feedback-label="nailed-it">Nailed It</button>
+                            <button class="feedback-button" data-feedback-label="too-much">Too Much</button>
+                            <button class="feedback-button" data-feedback-label="missed-it">Missed It</button>
+                        </div>
+                        <div id="feedback-summary" class="companion-copy">Taste profile is still blank.</div>
+                    </div>
+
+                    <div class="companion-card">
+                        <div class="companion-title">Witness Memory</div>
+                        <div id="memory-headline" class="companion-headline">No callbacks yet</div>
+                        <div id="memory-copy" class="companion-copy">Big moments that genuinely land can be remembered and fed back into later reactions.</div>
+                        <div id="memory-list" class="memory-list"></div>
+                        <div id="memory-empty" class="memory-empty">Play a few meaningful moments and mark the good ones. The strongest memories will stack here.</div>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="panel operations-panel">
+            <div class="operations-header">
+                <div>
+                    <h3 class="section-title">Operations Console</h3>
+                    <p class="operations-copy">
+                        Follow the live pipeline as a story instead of a raw dump. Runtime Hype groups the feed into capture, queue, reaction, diagnostics, and attention signals so it is easier to understand what the app is doing.
+                    </p>
+                </div>
+                <div class="tab-strip" role="tablist" aria-label="Operations views">
+                    <button class="tab-button active" id="tab-runtime" data-ops-tab="runtime" role="tab" aria-selected="true" aria-controls="panel-runtime">Runtime Hype</button>
+                    <button class="tab-button" id="tab-diagnostics" data-ops-tab="diagnostics" role="tab" aria-selected="false" aria-controls="panel-diagnostics">Diagnostics</button>
+                    <button class="tab-button" id="tab-ledger" data-ops-tab="ledger" role="tab" aria-selected="false" aria-controls="panel-ledger">Moment Ledger</button>
+                </div>
+            </div>
+
+            <div class="tab-panel active" id="panel-runtime" role="tabpanel" aria-labelledby="tab-runtime">
+                <div class="runtime-summary-grid">
+                    <div class="runtime-summary-card">
+                        <div class="runtime-summary-label">Pipeline Phase</div>
+                        <div id="runtime-summary-phase" class="runtime-summary-value">Booting</div>
+                        <div id="runtime-summary-phase-sub" class="runtime-summary-sub">Preparing the live capture and reaction stack.</div>
+                    </div>
+                    <div class="runtime-summary-card">
+                        <div class="runtime-summary-label">Latest Highlight</div>
+                        <div id="runtime-summary-highlight" class="runtime-summary-value">No hype yet</div>
+                        <div id="runtime-summary-highlight-sub" class="runtime-summary-sub">Approved reactions and big queue milestones appear here.</div>
+                    </div>
+                    <div class="runtime-summary-card">
+                        <div class="runtime-summary-label">Attention Needed</div>
+                        <div id="runtime-summary-attention" class="runtime-summary-value">0</div>
+                        <div id="runtime-summary-attention-sub" class="runtime-summary-sub">Warnings and errors are counted so blockers are easy to spot.</div>
+                    </div>
+                    <div class="runtime-summary-card">
+                        <div class="runtime-summary-label">Feed Coverage</div>
+                        <div id="runtime-summary-coverage" class="runtime-summary-value">0 events</div>
+                        <div id="runtime-summary-coverage-sub" class="runtime-summary-sub">Showing the current filtered activity stream.</div>
+                    </div>
+                </div>
+
+                <div class="runtime-toolbar">
+                    <div class="runtime-filter-group" role="toolbar" aria-label="Runtime filters">
+                        <button class="filter-pill active" data-runtime-filter="all">All Activity</button>
+                        <button class="filter-pill" data-runtime-filter="pipeline">Pipeline</button>
+                        <button class="filter-pill" data-runtime-filter="hype">Hype + Voice</button>
+                        <button class="filter-pill" data-runtime-filter="attention">Attention</button>
+                    </div>
+                    <div id="runtime-caption" class="runtime-caption">Newest events stay at the top and include stage badges, detail, and metrics.</div>
+                </div>
+
+                <div id="runtime-feed" class="runtime-feed">
+                    <div class="runtime-empty">Runtime activity will appear once the app starts moving through capture and classification.</div>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="panel-diagnostics" role="tabpanel" aria-labelledby="tab-diagnostics">
+                <div class="tab-section">
+                    <div class="diagnostics-grid">
+                        <div class="diag-card">
+                            <div class="selector-field">
+                                <label for="diagnostics-mode">Transport Mode</label>
+                                <select id="diagnostics-mode">
+                                    <option value="live">Live APIs</option>
+                                    <option value="mock">Mocked APIs</option>
+                                </select>
+                            </div>
+                            <div class="diag-sub">Switch between production transports and a deterministic local harness.</div>
+                        </div>
+                        <div class="diag-card">
+                            <div class="selector-field">
+                                <label for="diagnostics-scenario">Scenario</label>
+                                <select id="diagnostics-scenario">
+                                    <option value="stable">Stable</option>
+                                    <option value="slow-success">Slow Success</option>
+                                    <option value="malformed-json">Malformed JSON</option>
+                                    <option value="rate-limit">Rate Limit</option>
+                                    <option value="empty-model">Empty Model Reply</option>
+                                    <option value="audio-failure">Audio Failure</option>
+                                </select>
+                            </div>
+                            <div class="diag-sub">Exercises the same UI and queue path with controlled failure modes.</div>
+                        </div>
+                        <div class="diag-card">
+                            <div class="selector-field">
+                                <label for="diagnostics-latency">Injected Latency</label>
+                                <select id="diagnostics-latency">
+                                    <option value="0">0ms</option>
+                                    <option value="250">250ms</option>
+                                    <option value="750">750ms</option>
+                                    <option value="1500">1500ms</option>
+                                    <option value="3000">3000ms</option>
+                                </select>
+                            </div>
+                            <div class="diag-sub">Applies to mocked classification and voice paths to test pipeline feel.</div>
+                        </div>
+                        <div class="diag-card">
+                            <div class="stat-label">Suite Health</div>
+                            <div id="diagnostics-health" class="diag-value">Idle</div>
+                            <div id="diagnostics-summary" class="diag-sub">No diagnostics run yet in this session.</div>
+                        </div>
+                        <div class="diag-card full">
+                            <div class="controls compact">
+                                <button id="run-diagnostics-btn" class="secondary">Run Diagnostics Suite</button>
+                                <button id="inject-failure-btn" class="secondary">Inject Current Scenario</button>
+                            </div>
+                            <div class="diag-sub">The suite runs mocked stable, slow, malformed, rate-limit, and audio-failure passes and records the results below.</div>
+                            <div class="diag-table-wrap">
+                                <table class="diag-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Scenario</th>
+                                            <th>Status</th>
+                                            <th>Latency</th>
+                                            <th>Duration</th>
+                                            <th>Finding</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="diagnostics-results-body">
+                                        <tr id="diagnostics-results-empty">
+                                            <td colspan="5" style="color:#8ea2c2; font-style:italic;">No diagnostics results yet.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="panel-ledger" role="tabpanel" aria-labelledby="tab-ledger">
+                <div class="tab-section">
+                    <div id="log-table-wrapper">
+                        <table id="log-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Situation</th>
+                                    <th>Category</th>
+                                    <th>Reaction</th>
+                                    <th>Intensity</th>
+                                    <th>Hyped?</th>
+                                </tr>
+                            </thead>
+                            <tbody id="log-body">
+                                <tr id="log-empty">
+                                    <td colspan="6" style="text-align:center; padding:24px; color:#7286a7; font-style:italic;">
+                                        Waiting for the first meaningful moment...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <canvas id="diff-canvas" style="display:none;"></canvas>
+    <canvas id="full-canvas" style="display:none;"></canvas>
+
+    <script src="./hype-core.js"></script>
+    <script src="./renderer.js"></script>
+</body>
+</html>
